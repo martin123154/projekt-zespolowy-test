@@ -1,17 +1,27 @@
 package com.pgs.soft.visit.domain;
-import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.pgs.soft.visit.validation.Phone;
+import com.pgs.soft.visit.validation.Email;
+
+
 
 @Entity
 @Table(name="employee")
@@ -19,29 +29,29 @@ public class Employee {
 	
 	@Id
 	@GeneratedValue
-	private int idEmployee;
+	private int id;
 	
-	@NotEmpty
 	private String firstName;
-	
-	@NotEmpty
 	private String lastName;
-	
-	@NotEmpty
+	@Phone
 	private String telephoneNumber;
-	
-	@NotEmpty
+	@Column(unique=true)
+	@Email
+	private String email;
 	private String adress;
-	
-	@NotEmpty
-	@Size(min=6, max=6)
 	private String postcode;
-	
-	@NotEmpty
 	private String town;
-	
-	@NotEmpty
 	private String country;
+	
+ @ManyToOne
+@JoinColumn(name="idOutpost")
+	private Outpost outpost; 
+ 
+ @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)  
+	private User user;
+
+	
+	
 	
 	//Kontruktor
 	public Employee() {
@@ -50,10 +60,10 @@ public class Employee {
 	
 	//Setters & Getters
 	public int getIdEmployee() {
-		return idEmployee;
+		return id;
 	}
-	public void setIdEmployee(int idEmployee) {
-		this.idEmployee = idEmployee;
+	public void setIdEmployee(int id) {
+		this.id = id;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -91,12 +101,33 @@ public class Employee {
 	public void setTown(String town) {
 		this.town = town;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getCountry() {
 		return country;
 	}
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
+	 public Outpost getOutpost()
+	{
+		return outpost;
+	}
+	public void setOutpost(Outpost outpost)
+	{
+		this.outpost=outpost;
+	} 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 }
